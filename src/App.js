@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { record } from "rrweb";
 
 function App() {
@@ -8,6 +8,7 @@ function App() {
   const startRecording = () => {
     if (!recording) {
       record({
+        // TODO可以过滤掉一些事件
         emit(event) {
           setEvents((prevEvents) => [...prevEvents, event]);
         },
@@ -28,7 +29,7 @@ function App() {
   };
 
   const uploadData = () => {
-    fetch("http://localhost:3000/upload", {
+    fetch("/upload", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,12 +37,21 @@ function App() {
       body: JSON.stringify({ events }),
     }).then((response) => {
       if (response.ok) {
-        alert("Data uploaded successfully!");
+        console.log("Data uploaded successfully!");
       } else {
-        alert("Failed to upload data.");
+        console.log("Failed to upload data.");
       }
     });
   };
+
+  // TODO
+  // const simulateError = () => {
+  //   try {
+  //     console.log("".add());
+  //   } catch (err) {
+  //     console.log("err ->", err);
+  //   }
+  // };
 
   return (
     <div>
@@ -53,6 +63,7 @@ function App() {
         Stop Recording
       </button>
       <button onClick={uploadData}>Upload Data</button>
+      {/* <button onClick={simulateError}>Simulate Error</button> */}
     </div>
   );
 }
